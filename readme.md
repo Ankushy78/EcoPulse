@@ -104,3 +104,4 @@ EcoPulse/
 🔜 Frontend integration pending
 
 This backend is stable and ready to be connected to a frontend dashboard or deployed.
+Backend ready for frontend integration.
