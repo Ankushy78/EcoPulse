@@ -1,0 +1,241 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* EcoPulse Design System - Eco-themed colors and styles */
+
+@layer base {
+  :root {
+    /* Light mode - Clean and fresh eco theme */
+    --background: 160 20% 98%;
+    --foreground: 160 50% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 160 50% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 160 50% 10%;
+
+    /* Teal primary - eco-friendly, tech-forward */
+    --primary: 168 76% 36%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Soft sage secondary */
+    --secondary: 145 20% 92%;
+    --secondary-foreground: 160 50% 15%;
+
+    --muted: 160 15% 94%;
+    --muted-foreground: 160 10% 45%;
+
+    /* Emerald accent for highlights */
+    --accent: 152 68% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 160 15% 88%;
+    --input: 160 15% 88%;
+    --ring: 168 76% 36%;
+
+    --radius: 0.75rem;
+
+    /* Custom EcoPulse tokens */
+    --eco-gradient-start: 168 76% 36%;
+    --eco-gradient-end: 152 68% 45%;
+    --eco-glow: 168 76% 36%;
+    
+    /* Chart colors */
+    --chart-cpu: 168 76% 42%;
+    --chart-ram: 199 89% 48%;
+    --chart-disk: 262 83% 58%;
+    --chart-energy: 43 96% 56%;
+    --chart-co2: 152 68% 45%;
+
+    /* Status colors */
+    --status-good: 152 68% 45%;
+    --status-warning: 43 96% 56%;
+    --status-danger: 0 72% 51%;
+
+    --sidebar-background: 160 20% 97%;
+    --sidebar-foreground: 160 50% 15%;
+    --sidebar-primary: 168 76% 36%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 160 15% 92%;
+    --sidebar-accent-foreground: 160 50% 15%;
+    --sidebar-border: 160 15% 88%;
+    --sidebar-ring: 168 76% 36%;
+  }
+
+  .dark {
+    /* Dark mode - Deep eco theme */
+    --background: 160 25% 6%;
+    --foreground: 160 15% 95%;
+
+    --card: 160 25% 9%;
+    --card-foreground: 160 15% 95%;
+
+    --popover: 160 25% 9%;
+    --popover-foreground: 160 15% 95%;
+
+    /* Vibrant teal for dark mode */
+    --primary: 168 76% 48%;
+    --primary-foreground: 160 50% 5%;
+
+    --secondary: 160 20% 15%;
+    --secondary-foreground: 160 15% 90%;
+
+    --muted: 160 20% 12%;
+    --muted-foreground: 160 10% 55%;
+
+    /* Bright emerald accent */
+    --accent: 152 72% 52%;
+    --accent-foreground: 160 50% 5%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 160 20% 16%;
+    --input: 160 20% 16%;
+    --ring: 168 76% 48%;
+
+    /* Dark mode EcoPulse tokens */
+    --eco-gradient-start: 168 76% 48%;
+    --eco-gradient-end: 152 72% 52%;
+    --eco-glow: 168 76% 48%;
+
+    /* Chart colors - brighter for dark mode */
+    --chart-cpu: 168 76% 52%;
+    --chart-ram: 199 89% 55%;
+    --chart-disk: 262 83% 65%;
+    --chart-energy: 43 96% 60%;
+    --chart-co2: 152 72% 52%;
+
+    --sidebar-background: 160 25% 8%;
+    --sidebar-foreground: 160 15% 90%;
+    --sidebar-primary: 168 76% 48%;
+    --sidebar-primary-foreground: 160 50% 5%;
+    --sidebar-accent: 160 20% 14%;
+    --sidebar-accent-foreground: 160 15% 90%;
+    --sidebar-border: 160 20% 16%;
+    --sidebar-ring: 168 76% 48%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  /* Gradient utilities */
+  .eco-gradient {
+    @apply bg-gradient-to-r from-primary to-accent;
+  }
+
+  .eco-gradient-radial {
+    background: radial-gradient(
+      ellipse at top,
+      hsl(var(--eco-gradient-start) / 0.15),
+      transparent 60%
+    );
+  }
+
+  .eco-glow {
+    box-shadow: 0 0 40px -10px hsl(var(--eco-glow) / 0.4);
+  }
+
+  .eco-glow-sm {
+    box-shadow: 0 0 20px -5px hsl(var(--eco-glow) / 0.3);
+  }
+
+  /* Glass morphism */
+  .glass {
+    @apply bg-card/80 backdrop-blur-xl;
+  }
+
+  .glass-border {
+    @apply border border-border/50;
+  }
+
+  /* Animated pulse for live indicators */
+  .pulse-eco {
+    animation: pulse-eco 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse-eco {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  /* Smooth number transitions */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Custom scrollbar */
+  .scrollbar-eco {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--primary) / 0.3) transparent;
+  }
+
+  .scrollbar-eco::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-eco::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-eco::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--primary) / 0.3);
+    border-radius: 3px;
+  }
+
+  .scrollbar-eco::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--primary) / 0.5);
+  }
+}
+
+/* Animation keyframes */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px -5px hsl(var(--eco-glow) / 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px -5px hsl(var(--eco-glow) / 0.5);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+/* Gradient text */
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+}
