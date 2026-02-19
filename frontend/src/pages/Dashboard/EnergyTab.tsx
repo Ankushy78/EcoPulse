@@ -1,13 +1,13 @@
 import { useMetrics } from "@/hooks/useMetrics";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { MetricCard } from "@/components/ui/metric-card";
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
   ResponsiveContainer,
   Cell,
   PieChart,
@@ -16,9 +16,8 @@ import {
 import { Zap, Battery, TrendingUp, BatteryCharging } from "lucide-react";
 
 export default function EnergyTab() {
-  const { currentMetrics, history, aggregates } = useMetrics();
+  const { currentMetrics } = useMetrics();
 
-  // Calculate hourly energy data (simulated)
   const hourlyData = Array.from({ length: 24 }, (_, i) => {
     const hour = i;
     const isActiveHour = hour >= 8 && hour <= 22;
@@ -30,7 +29,6 @@ export default function EnergyTab() {
     };
   });
 
-  // Energy breakdown by component (simulated)
   const energyBreakdown = [
     { name: "CPU", value: 45, color: "hsl(var(--chart-cpu))" },
     { name: "Display", value: 25, color: "hsl(var(--chart-energy))" },
@@ -42,15 +40,18 @@ export default function EnergyTab() {
   const totalDailyEnergy = hourlyData.reduce((sum, h) => sum + h.energy, 0);
   const avgHourlyEnergy = totalDailyEnergy / 24;
   const currentPower = currentMetrics?.power_watts || 0;
-  const estimatedMonthlyCost = (totalDailyEnergy / 1000) * 30 * 0.12; // $0.12 per kWh average
+  const estimatedMonthlyCost = (totalDailyEnergy / 1000) * 30 * 0.12;
 
   const CustomBarTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-popover border rounded-lg shadow-lg p-3">
-          <p className="font-medium text-sm">{label}</p>
+        <div className="bg-popover border border-border rounded-lg shadow-lg p-3">
+          <p className="font-medium text-sm text-foreground">{label}</p>
           <p className="text-sm text-muted-foreground">
-            Energy: <span className="font-mono font-medium">{payload[0].value.toFixed(1)} Wh</span>
+            Energy:{" "}
+            <span className="font-mono font-medium text-foreground">
+              {payload[0].value.toFixed(1)} Wh
+            </span>
           </p>
         </div>
       );
@@ -60,6 +61,7 @@ export default function EnergyTab() {
 
   return (
     <div className="space-y-6 animate-fade-in">
+
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Energy Consumption</h1>
@@ -68,7 +70,7 @@ export default function EnergyTab() {
         </p>
       </div>
 
-      {/* Key Metrics */}
+      {/* Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard
           title="Current Power"
@@ -97,9 +99,10 @@ export default function EnergyTab() {
         />
       </div>
 
-      {/* Charts Row */}
+      {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Hourly Energy Chart */}
+
+        {/* Bar Chart */}
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle>Hourly Energy Consumption</CardTitle>
@@ -110,25 +113,18 @@ export default function EnergyTab() {
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={hourlyData}>
                   <CartesianGrid strokeDasharray="3 3" className="stroke-border" vertical={false} />
-                  <XAxis 
-                    dataKey="hour" 
-                    tick={{ fontSize: 10 }}
-                    tickLine={false}
-                    axisLine={false}
-                    interval={2}
-                  />
-                  <YAxis 
-                    tick={{ fontSize: 11 }}
-                    tickLine={false}
-                    axisLine={false}
-                    tickFormatter={(value) => `${value}Wh`}
-                  />
+                  <XAxis dataKey="hour" tick={{ fontSize: 10 }} interval={2} />
+                  <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `${v}Wh`} />
                   <Tooltip content={<CustomBarTooltip />} />
                   <Bar dataKey="energy" radius={[4, 4, 0, 0]}>
                     {hourlyData.map((entry, index) => (
-                      <Cell 
-                        key={`cell-${index}`} 
-                        fill={entry.isCurrentHour ? "hsl(var(--primary))" : "hsl(var(--chart-energy))"}
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={
+                          entry.isCurrentHour
+                            ? "hsl(var(--primary))"
+                            : "hsl(var(--chart-energy))"
+                        }
                         opacity={entry.isCurrentHour ? 1 : 0.7}
                       />
                     ))}
@@ -139,7 +135,7 @@ export default function EnergyTab() {
           </CardContent>
         </Card>
 
-        {/* Energy Breakdown Pie */}
+        {/* Pie Chart */}
         <Card>
           <CardHeader>
             <CardTitle>Power Distribution</CardTitle>
@@ -162,23 +158,34 @@ export default function EnergyTab() {
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip 
-                    formatter={(value: number) => `${value}%`}
-                    contentStyle={{ 
+
+                  {/* ✅ FIXED DARK MODE TOOLTIP */}
+                  <Tooltip
+                    formatter={(value: number) => [`${value}%`, "Usage"]}
+                    contentStyle={{
                       backgroundColor: "hsl(var(--popover))",
                       border: "1px solid hsl(var(--border))",
-                      borderRadius: "8px"
+                      borderRadius: "10px",
+                      color: "hsl(var(--foreground))",
+                      boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
+                    }}
+                    itemStyle={{
+                      color: "hsl(var(--foreground))",
+                    }}
+                    labelStyle={{
+                      color: "hsl(var(--muted-foreground))",
                     }}
                   />
                 </PieChart>
               </ResponsiveContainer>
             </div>
+
             {/* Legend */}
             <div className="grid grid-cols-2 gap-2 mt-4">
               {energyBreakdown.map((item) => (
                 <div key={item.name} className="flex items-center gap-2 text-sm">
-                  <div 
-                    className="w-3 h-3 rounded-full" 
+                  <div
+                    className="w-3 h-3 rounded-full"
                     style={{ backgroundColor: item.color }}
                   />
                   <span className="text-muted-foreground">{item.name}</span>
@@ -186,28 +193,12 @@ export default function EnergyTab() {
                 </div>
               ))}
             </div>
+
           </CardContent>
         </Card>
+
       </div>
 
-      {/* Tips Card */}
-      <Card className="bg-primary/5 border-primary/20">
-        <CardContent className="pt-6">
-          <div className="flex items-start gap-4">
-            <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-              <Zap className="h-5 w-5 text-primary" />
-            </div>
-            <div>
-              <h3 className="font-semibold">Energy Saving Tip</h3>
-              <p className="text-sm text-muted-foreground mt-1">
-                Your peak energy usage is during afternoon hours. Consider scheduling heavy tasks 
-                during off-peak hours (before 8 AM or after 10 PM) to reduce overall consumption 
-                and potentially save on electricity costs.
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

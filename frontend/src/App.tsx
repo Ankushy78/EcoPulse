@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import DashboardLayout from "./pages/Dashboard/Layout";
@@ -12,6 +13,10 @@ import LiveTab from "./pages/Dashboard/LiveTab";
 import EnergyTab from "./pages/Dashboard/EnergyTab";
 import CarbonTab from "./pages/Dashboard/CarbonTab";
 import NotFound from "./pages/NotFound";
+import AdminDashboard from "./pages/admin";
+import UsersPage from "./pages/admin/users";
+import DevicesPage from "./pages/admin/devices";
+import SettingsPage from "./pages/admin/settings";
 
 const queryClient = new QueryClient();
 
@@ -23,15 +28,28 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
+
+            {/* Public Routes */}
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
+
+            {/* User Dashboard Routes */}
             <Route path="/dashboard" element={<DashboardLayout />}>
               <Route index element={<HomeTab />} />
               <Route path="live" element={<LiveTab />} />
               <Route path="energy" element={<EnergyTab />} />
               <Route path="carbon" element={<CarbonTab />} />
             </Route>
+
+            {/* ✅ Admin Routes */}
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/devices" element={<DevicesPage />} />
+            <Route path="/admin/users" element={<UsersPage />} />
+            <Route path="/admin/settings" element={<SettingsPage />} />
+
+            {/* 404 */}
             <Route path="*" element={<NotFound />} />
+
           </Routes>
         </BrowserRouter>
       </TooltipProvider>

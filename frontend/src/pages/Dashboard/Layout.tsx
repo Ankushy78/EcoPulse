@@ -2,18 +2,16 @@ import { useEffect } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LiveIndicator } from "@/components/ui/live-indicator";
-import { 
-  Leaf, 
-  Home, 
-  Activity, 
-  Zap, 
-  CloudSun, 
-  LogOut, 
-  Moon, 
+import {
+  Leaf,
+  Home,
+  Activity,
+  Zap,
+  CloudSun,
+  LogOut,
+  Moon,
   Sun,
-  Settings
 } from "lucide-react";
 import { useLocation, Link } from "react-router-dom";
 import { useState } from "react";
@@ -25,15 +23,16 @@ export default function DashboardLayout() {
   const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
-    // Set dark mode by default
     document.documentElement.classList.add("dark");
   }, []);
+
 
   useEffect(() => {
     if (!loading && !user) {
       navigate("/auth");
     }
   }, [user, loading, navigate]);
+  
 
   const toggleTheme = () => {
     setIsDark(!isDark);
@@ -63,6 +62,7 @@ export default function DashboardLayout() {
     );
   }
 
+  
   if (!user) return null;
 
   const tabs = [
@@ -77,12 +77,13 @@ export default function DashboardLayout() {
       {/* Header */}
       <header className="sticky top-0 z-50 glass glass-border border-b">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          {/* Logo */}
           <Link to="/dashboard" className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl eco-gradient flex items-center justify-center">
               <Leaf className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="font-bold text-xl gradient-text hidden sm:block">EcoPulse</span>
+            <span className="font-bold text-xl gradient-text hidden sm:block">
+              EcoPulse
+            </span>
           </Link>
 
           {/* Navigation Tabs */}
@@ -98,7 +99,9 @@ export default function DashboardLayout() {
                       className={`gap-2 ${isActive ? "eco-gradient" : ""}`}
                     >
                       <tab.icon className="h-4 w-4" />
-                      <span className="hidden md:inline">{tab.label}</span>
+                      <span className="hidden md:inline">
+                        {tab.label}
+                      </span>
                     </Button>
                   </Link>
                 );
@@ -109,14 +112,18 @@ export default function DashboardLayout() {
           {/* Right side actions */}
           <div className="flex items-center gap-3">
             <LiveIndicator size="sm" />
-            
+
             <Button
               variant="ghost"
               size="icon"
               onClick={toggleTheme}
               className="rounded-lg"
             >
-              {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              {isDark ? (
+                <Sun className="h-4 w-4" />
+              ) : (
+                <Moon className="h-4 w-4" />
+              )}
             </Button>
 
             <Button

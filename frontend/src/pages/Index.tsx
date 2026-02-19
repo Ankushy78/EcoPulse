@@ -1,6 +1,36 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Leaf, Activity, Zap, CloudSun, ArrowRight, CheckCircle2 } from "lucide-react";
+
+function AnimatedNumber({ target, suffix }: { target: number; suffix: string }) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    let start = 0;
+    const duration = 1600;
+    const increment = target / (duration / 16);
+
+    const animate = () => {
+      start += increment;
+      if (start < target) {
+        setCount(Math.floor(start));
+        requestAnimationFrame(animate);
+      } else {
+        setCount(target);
+      }
+    };
+
+    requestAnimationFrame(animate);
+  }, [target]);
+
+  return (
+    <>
+      {count}
+      {suffix}
+    </>
+  );
+}
 
 export default function Index() {
   const features = [
@@ -22,9 +52,9 @@ export default function Index() {
   ];
 
   const stats = [
-    { value: "400g", label: "Avg CO₂/kWh" },
-    { value: "15-65W", label: "Typical Laptop Power" },
-    { value: "21kg", label: "Tree Absorbs/Year" },
+    { value: 400, label: "Avg CO₂/kWh", suffix: "g" },
+    { value: 65, label: "Typical Laptop Power (Max)", suffix: "W" },
+    { value: 21, label: "Tree Absorbs/Year", suffix: "kg" },
   ];
 
   return (
@@ -62,13 +92,11 @@ export default function Index() {
       <main className="relative z-10">
         <section className="container mx-auto px-4 py-20 text-center">
           <div className="max-w-4xl mx-auto animate-fade-in">
-            {/* Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm mb-8">
               <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
               <span className="text-muted-foreground">Track your digital carbon footprint</span>
             </div>
 
-            {/* Main Heading */}
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6">
               Reduce Your
               <span className="block gradient-text">Computer's Impact</span>
@@ -79,7 +107,6 @@ export default function Index() {
               calculates its carbon footprint, helping you make eco-friendly computing choices.
             </p>
 
-            {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link to="/auth">
                 <Button size="lg" className="eco-gradient h-14 px-8 text-lg">
@@ -93,7 +120,7 @@ export default function Index() {
             </div>
           </div>
 
-          {/* Stats Row */}
+          {/* Animated Stats Row */}
           <div className="mt-20 grid grid-cols-3 gap-8 max-w-2xl mx-auto">
             {stats.map((stat, index) => (
               <div 
@@ -101,7 +128,9 @@ export default function Index() {
                 className="text-center animate-fade-in"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <p className="text-3xl md:text-4xl font-bold gradient-text">{stat.value}</p>
+                <p className="text-3xl md:text-4xl font-bold gradient-text">
+                  <AnimatedNumber target={stat.value} suffix={stat.suffix} />
+                </p>
                 <p className="text-sm text-muted-foreground mt-1">{stat.label}</p>
               </div>
             ))}
@@ -136,34 +165,6 @@ export default function Index() {
           </div>
         </section>
 
-        {/* Benefits List */}
-        <section className="container mx-auto px-4 py-20">
-          <div className="max-w-3xl mx-auto bg-card rounded-3xl border p-8 md:p-12">
-            <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
-              Why Use EcoPulse?
-            </h2>
-            <div className="space-y-4">
-              {[
-                "Real-time CPU, RAM, and disk usage monitoring",
-                "Accurate energy consumption calculations",
-                "CO₂ emissions tracking with visual indicators",
-                "Personalized optimization suggestions",
-                "Daily and weekly usage reports",
-                "Dark mode for reduced eye strain",
-              ].map((benefit, index) => (
-                <div 
-                  key={benefit}
-                  className="flex items-center gap-3 p-4 rounded-xl bg-muted/50 animate-slide-in-right"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <CheckCircle2 className="h-5 w-5 text-accent shrink-0" />
-                  <span>{benefit}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* CTA Section */}
         <section className="container mx-auto px-4 py-20">
           <div className="relative overflow-hidden rounded-3xl eco-gradient p-12 md:p-16 text-center">
@@ -181,7 +182,6 @@ export default function Index() {
                 </Button>
               </Link>
             </div>
-            {/* Decorative circles */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full blur-2xl" />
           </div>
